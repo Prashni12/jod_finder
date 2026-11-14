@@ -1,34 +1,27 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <head>
-      <meta charset="UTF-8">
-      <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      
-      <!-- Primary SEO Tags for RozgarAI -->
-      <title>RozgarAI - AI Resume & Job Recommender</title>
-      <meta name="title" content="RozgarAI - AI Resume & Job Recommender">
-      <meta name="description" content="RozgarAI is an AI-powered job recommender and interview preparation platform. Upload your resume to find matching jobs instantly.">
-      <meta name="keywords" content="RozgarAI, Rozgar AI, AI job recommender, resume job matcher, interview preparation">
-    
-      <!-- Open Graph / Social Sharing Tags -->
-      <meta property="og:type" content="website">
-      <meta property="og:title" content="RozgarAI - AI Resume & Job Recommender">
-      <meta property="og:description" content="Upload your resume to get smart job recommendations and interview prep with RozgarAI.">
-    
-      <!-- Google Search Console Verification (Paste your code below) -->
-      <meta name="google-site-verification" content="YOUR-GOOGLE-VERIFICATION-CODE" />
-    </head>
-
     <meta charset="UTF-8">
-    
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cross-Platform Aggregator System | The Career Ecosystem</title>
 
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+    <!-- Primary SEO Tags for RozgarAI -->
+    <title>RozgarAI - Cross-Platform Job Aggregator & AI Resume Matcher</title>
+    <meta name="title" content="RozgarAI - Cross-Platform Job Aggregator & AI Resume Matcher">
+    <meta name="description" content="RozgarAI is an intelligent ecosystem designed to bridge the gap between talented individuals and their dream careers. Upload your resume for ATS scoring, smart analysis, and instant job matches.">
+    <meta name="keywords" content="RozgarAI, Rozgar AI, AI job recommender, ATS scoring, resume job matcher, interview preparation">
+
+    <!-- Open Graph / Social Sharing Tags -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="RozgarAI - Cross-Platform Job Aggregator & AI Resume Matcher">
+    <meta property="og:description" content="Upload your resume to RozgarAI and get matched with roles on LinkedIn, Naukri, and Indeed instantly.">
+
+    <!-- Google Search Console Verification: Replace PASTE_YOUR_GOOGLE_CODE_HERE with your code -->
+    <meta name="google-site-verification" content="PASTE_YOUR_GOOGLE_CODE_HERE" />
+
+    <link href="https://jsdelivr.net" rel="stylesheet">
+    <link href="https://cloudflare.com" rel="stylesheet">
+    <link href="https://googleapis.com" rel="stylesheet">
+    <link rel="stylesheet" href="https://cloudflare.com"/>
 
     <style>
         :root {
@@ -190,7 +183,7 @@
 <body>
 
     <nav class="navbar d-flex justify-content-between">
-        <div class="brand-logo">Cross Platform Aggregator System</div>
+        <div class="brand-logo">RozgarAI</div>
         <div class="d-flex align-items-center gap-3">
             <a href="{{ url_for('login') }}" class="btn-login">Sign In</a>
             <a href="{{ url_for('signup') }}" class="btn-signup">Join Now</a>
@@ -199,15 +192,15 @@
 
     <section class="hero">
         <div class="hero-text animate__animated animate__fadeInLeft">
-            <span class="badge rounded-pill bg-primary bg-opacity-10 text-primary px-3 py-2 mb-3 fw-bold">v3.0 Engine Now Live</span>
+            <span class="badge rounded-pill bg-primary bg-opacity-10 text-primary px-3 py-2 mb-3 fw-bold">RozgarAI v3.0 Engine Now Live</span>
             <h1>Find the Job You Actually Deserve</h1>
-            <p>Upload your resume and let our platform handle the search. Get matched with roles on LinkedIn, Naukri, and Indeed instantly.</p>
+            <p>Upload your resume to RozgarAI and let our platform handle the search. Get matched with roles on LinkedIn, Naukri, and Indeed instantly.</p>
             <div class="d-flex gap-3">
                 <a href="{{ url_for('signup') }}" class="btn-signup py-3 px-5">Get Started Free</a>
             </div>
         </div>
         <div class="hero-img animate__animated animate__fadeInRight">
-            <img src="https://illustrations.popsy.co/gray/work-from-home.svg" alt="Job Search">
+            <img src="https://popsy.co" alt="RozgarAI Job Search">
         </div>
     </section>
 
@@ -219,7 +212,7 @@
 
     <section class="features">
         <div class="text-center mb-5">
-            <h2 class="fw-bold" style="font-size: 2.5rem;">Why Choose this System?</h2>
+            <h2 class="fw-bold" style="font-size: 2.5rem;">Why Choose RozgarAI?</h2>
             <p class="text-muted">Built for the modern professional using MSc CS-grade algorithms.</p>
         </div>
 
@@ -228,42 +221,37 @@
                 <div class="feature-card">
                     <div class="feature-icon"><i class="fas fa-file-shield"></i></div>
                     <h5 class="fw-bold">ATS Scoring</h5>
-                    <p class="small text-muted">Optimize your resume against 100+ industry-standard keywords to bypass ATS filters.</p>
+                    <p class="small text-muted mb-0">Optimize your resume against 100+ industry-standard keywords to bypass ATS filters.</p>
                 </div>
             </div>
             <div class="col-md-3">
                 <div class="feature-card">
                     <div class="feature-icon"><i class="fas fa-microchip"></i></div>
                     <h5 class="fw-bold">Smart Analysis</h5>
-                    <p class="small text-muted">Automatically extract core technical skills and project experience from your PDF.</p>
+                    <p class="small text-muted mb-0">Automatically extract core technical skills and project experience from your PDF.</p>
                 </div>
             </div>
             <div class="col-md-3">
                 <div class="feature-card">
-                    <div class="feature-icon"><i class="fas fa-user-graduate"></i></div>
+                    <div class="feature-icon"><i class="fas fa-comments"></i></div>
                     <h5 class="fw-bold">Interview Prep</h5>
-                    <p class="small text-muted">Access curated technical question banks and mock modules tailored to your job matches.</p>
+                    <p class="small text-muted mb-0">Access curated technical question banks and mock modules tailored to your job matches.</p>
                 </div>
             </div>
             <div class="col-md-3">
                 <div class="feature-card">
                     <div class="feature-icon"><i class="fas fa-bolt"></i></div>
                     <h5 class="fw-bold">Real-time Feed</h5>
-                    <p class="small text-muted">Aggregated listings from LinkedIn and Indeed refreshed every 60 seconds.</p>
+                    <p class="small text-muted mb-0">Aggregated listings from LinkedIn and Indeed refreshed every 60 seconds.</p>
                 </div>
             </div>
         </div>
     </section>
 
     <footer class="footer">
-        <div class="row">
-            <div class="col-lg-12 text-center">
-                <div class="footer-brand">Cross Platform Aggregator System</div>
-                <p class="mx-auto" style="max-width: 600px;">An intelligent ecosystem designed to bridge the gap between talented individuals and their dream careers. Empowering your journey with data-driven insights.</p>
-            </div>
-        </div>
-        <hr class="my-5 border-secondary">
-        <div class="text-center small">© 2026 Cross Platform Aggregator System. Pursuing MSc CS Excellence.</div>
+        <div class="footer-brand">RozgarAI</div>
+        <p class="mb-3" style="max-width: 500px;">An intelligent ecosystem designed to bridge the gap between talented individuals and their dream careers. Empowering your journey with data-driven insights.</p>
+        <p class="small mb-0">&copy; 2026 RozgarAI. Pursuing MSc CS Excellence.</p>
     </footer>
 
 </body>
