@@ -1,0 +1,10 @@
+Flask
+Flask-SQLAlchemy
+gunicorn
+psycopg[binary]
+psycopg2-binary
+python-dotenv
+PyPDF2
+requests
+Werkzeug
+SQLAlchemy

@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Interview Prep | AI Job Finder</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+
+    <style>
+        :root {
+            --primary: #6366f1;
+            --secondary: #9333ea;
+            --dark-surface: #0f172a;
+            --bg-body: #f1f5f9;
+            --card-radius: 24px;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background: var(--bg-body);
+            transition: all 0.3s ease;
+        }
+
+        /* SIDEBAR (Original project style) */
+        .sidebar {
+            position: fixed;
+            width: 240px;
+            height: 100vh;
+            background: var(--dark-surface);
+            color: white;
+            padding: 30px 20px;
+            z-index: 1000;
+        }
+
+        .sidebar h4 { font-weight: 700; color: var(--primary); margin-bottom: 30px; }
+
+        .sidebar a {
+            display: block;
+            color: #94a3b8;
+            text-decoration: none;
+            margin: 8px 0;
+            padding: 12px;
+            border-radius: 12px;
+            transition: 0.3s;
+        }
+
+        .sidebar a:hover { background: rgba(255, 255, 255, 0.1); color: white; }
+
+        /* MAIN AREA */
+        .main {
+            margin-left: 260px;
+            padding: 40px;
+        }
+
+        /* HEADER SECTION */
+        .header-section {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            padding: 50px;
+            color: white;
+            border-radius: 30px;
+            margin-bottom: 40px;
+            box-shadow: 0 10px 25px -5px rgba(99, 102, 241, 0.3);
+        }
+
+        /* RESOURCE CARDS */
+        .resource-card {
+            background: white;
+            border-radius: var(--card-radius);
+            padding: 30px;
+            height: 100%;
+            border: 1px solid #e2e8f0;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .resource-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.1);
+            border-color: var(--primary);
+        }
+
+        .icon-box {
+            width: 55px;
+            height: 55px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            margin-bottom: 20px;
+            transition: 0.3s;
+        }
+
+        /* ICON COLORS */
+        .bg-tech { background: #eef2ff; color: #6366f1; }
+        .bg-hr { background: #f0fdf4; color: #16a34a; }
+        .bg-brain { background: #fffbeb; color: #d97706; }
+        .bg-resume { background: #ecfeff; color: #0891b2; }
+        .bg-mock { background: #f8fafc; color: #1e293b; }
+        .bg-comm { background: #fdf2f8; color: #db2777; }
+
+        .btn-modern {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 14px;
+            font-weight: 600;
+            width: 100%;
+            transition: 0.3s;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+        }
+
+        .btn-modern:hover {
+            opacity: 0.9;
+            color: white;
+            transform: scale(1.02);
+        }
+
+        /* ANIMATIONS */
+        .animate-card {
+            animation: fadeInUp 0.6s ease backwards;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="sidebar">
+        <h4>Interview Preparation 🎯</h4>
+        <a href="{{ url_for('dashboard') }}"><i class="fas fa-home me-2"></i> Home </a>
+        <a href="{{ url_for('upload_resume') }}"><i class="fas fa-upload me-2"></i> Resume</a>
+        <a href="{{ url_for('recommend_jobs') }}"><i class="fas fa-briefcase me-2"></i> Job Matches</a>
+        <a href="{{ url_for('interview_prep') }}" class="text-white fw-bold"><i class="fas fa-user-tie me-2"></i> Interview Prep</a>
+        <a href="{{ url_for('logout') }}"><i class="fas fa-sign-out-alt me-2"></i> Logout</a>
+    </div>
+
+    <div class="main">
+        <div class="header-section animate__animated animate__fadeInDown">
+            <h2 class="fw-bold">Master Your Interview 🎯</h2>
+            <p class="opacity-75 mb-0">Many resources to help you bridge the gap between matching and hiring.</p>
+        </div>
+
+        <div class="row g-4">
+            <div class="col-md-4 animate-card" style="animation-delay: 0.1s;">
+                <div class="resource-card">
+                    <div>
+                        <div class="icon-box bg-tech">
+                            <i class="fas fa-code"></i>
+                        </div>
+                        <h5 class="fw-bold">Technical Skills</h5>
+                        <p class="text-muted small">Deep dive into data structures, algorithms, and system design challenges.</p>
+                    </div>
+                    <a href="https://leetcode.com" target="_blank" class="btn-modern mt-3">Practice Now</a>
+                </div>
+            </div>
+
+            <div class="col-md-4 animate-card" style="animation-delay: 0.2s;">
+                <div class="resource-card">
+                    <div>
+                        <div class="icon-box bg-hr">
+                            <i class="fas fa-user-check"></i>
+                        </div>
+                        <h5 class="fw-bold">HR Behavioral</h5>
+                        <p class="text-muted small">Master the art of storytelling and behavioral responses for cultural fit.</p>
+                    </div>
+                    <a href="https://www.geeksforgeeks.org/hr-interview-questions/" target="_blank" class="btn-modern mt-3">Learn Logic</a>
+                </div>
+            </div>
+
+            <div class="col-md-4 animate-card" style="animation-delay: 0.3s;">
+                <div class="resource-card">
+                    <div>
+                        <div class="icon-box bg-brain">
+                            <i class="fas fa-brain"></i>
+                        </div>
+                        <h5 class="fw-bold">Aptitude & Logic</h5>
+                        <p class="text-muted small">Sharpen your analytical thinking and mathematical reasoning skills.</p>
+                    </div>
+                    <a href="https://www.indiabix.com/" target="_blank" class="btn-modern mt-3">Start Quiz</a>
+                </div>
+            </div>
+
+            <div class="col-md-4 animate-card" style="animation-delay: 0.4s;">
+                <div class="resource-card">
+                    <div>
+                        <div class="icon-box bg-resume">
+                            <i class="fas fa-file-invoice"></i>
+                        </div>
+                        <h5 class="fw-bold">ATS Optimization</h5>
+                        <p class="text-muted small">Refine your resume formatting to pass through automated AI filters.</p>
+                    </div>
+                    <a href="https://www.myperfectresume.com/" target="_blank" class="btn-modern mt-3">Optimize File</a>
+                </div>
+            </div>
+
+            <div class="col-md-4 animate-card" style="animation-delay: 0.5s;">
+                <div class="resource-card">
+                    <div>
+                        <div class="icon-box bg-mock">
+                            <i class="fas fa-headset"></i>
+                        </div>
+                        <h5 class="fw-bold">Peer Mock Trials</h5>
+                        <p class="text-muted small">Practice real-time interviews with peers to build speaking confidence.</p>
+                    </div>
+                    <a href="https://www.pramp.com/" target="_blank" class="btn-modern mt-3">Find Partner</a>
+                </div>
+            </div>
+
+            <div class="col-md-4 animate-card" style="animation-delay: 0.6s;">
+                <div class="resource-card">
+                    <div>
+                        <div class="icon-box bg-comm">
+                            <i class="fas fa-microphone-lines"></i>
+                        </div>
+                        <h5 class="fw-bold">Soft Skills</h5>
+                        <p class="text-muted small">Improve your body language, tone, and professional communication.</p>
+                    </div>
+                    <a href="https://www.testdome.com/tests/communication-test/200" target="_blank" class="btn-modern mt-3">Take Test</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>

@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>AI Job Dashboard</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <style>
+        :root {
+            --primary: #6366f1;
+            --secondary: #9333ea;
+            --bg-body: #f1f5f9;
+            --card-radius: 20px;
+            --dark-surface: #1e293b;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background: var(--bg-body);
+            overflow-x: hidden;
+            transition: all 0.3s ease;
+        }
+
+        /* SIDEBAR */
+        .sidebar {
+            position: fixed;
+            width: 240px;
+            height: 100vh;
+            background: #0f172a;
+            color: white;
+            padding: 30px 20px;
+            z-index: 1000;
+        }
+
+        body.full-screen .sidebar { display: none; }
+        body.full-screen .main { margin-left: 0; }
+
+        .sidebar a {
+            display: block;
+            color: #cbd5e1;
+            text-decoration: none;
+            margin: 10px 0;
+            padding: 12px;
+            border-radius: 12px;
+            transition: 0.3s;
+        }
+
+        .sidebar a:hover { background: rgba(255, 255, 255, 0.1); color: white; }
+
+        /* MAIN CONTENT */
+        .main {
+            margin-left: 240px;
+            padding: 40px;
+            transition: margin 0.5s ease;
+            position: relative;
+        }
+
+        .header {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            padding: 30px;
+            color: white;
+            border-radius: var(--card-radius);
+            margin-bottom: 30px;
+        }
+
+        /* JOB CARD - Fixed Overflow for Popups */
+        .job-card {
+            background: white;
+            border-radius: var(--card-radius);
+            padding: 24px;
+            border: 1px solid #e2e8f0;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            /* Removed overflow: hidden so popup shows clearly */
+        }
+
+        .job-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+            border-color: var(--primary);
+        }
+
+        /* MATCH SCORE POPUP FIX */
+        .match-badge-container {
+            position: relative;
+            display: inline-block;
+            cursor: pointer;
+        }
+
+        .match-badge {
+            background: #f0fdf4;
+            color: #16a34a;
+            padding: 6px 14px;
+            border-radius: 50px;
+            font-weight: 700;
+        }
+
+        .match-popup {
+            visibility: hidden;
+            width: 180px;
+            background: #0f172a;
+            color: #fff;
+            text-align: center;
+            border-radius: 8px;
+            padding: 10px;
+            position: absolute;
+            z-index: 9999; /* Ensure it stays on top */
+            bottom: 130%;
+            left: 50%;
+            transform: translateX(-50%) translateY(10px);
+            opacity: 0;
+            transition: 0.3s;
+            font-size: 11px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+        }
+
+        .match-badge-container:hover .match-popup {
+            visibility: visible;
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+
+        /* CHART EXPLANATIONS */
+        .info-trigger {
+            cursor: help;
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+        }
+
+        .chart-explanation {
+            visibility: hidden;
+            width: 220px;
+            background: #0f172a;
+            color: white;
+            padding: 12px;
+            border-radius: 12px;
+            position: absolute;
+            top: 100%;
+            z-index: 100;
+            font-size: 12px;
+            font-weight: 400;
+            opacity: 0;
+            transition: 0.3s;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            margin-top: 10px;
+        }
+
+        .info-trigger:hover .chart-explanation {
+            visibility: visible;
+            opacity: 1;
+        }
+
+        /* FILTER DRAWER */
+        .filter-drawer {
+            position: fixed;
+            right: -350px;
+            top: 0;
+            width: 350px;
+            height: 100vh;
+            background: white;
+            box-shadow: -10px 0 30px rgba(0, 0, 0, 0.05);
+            z-index: 1100;
+            padding: 40px 30px;
+            transition: 0.5s cubic-bezier(0.7, 0, 0.3, 1);
+        }
+
+        .filter-drawer.active { right: 0; }
+
+        .filter-toggle {
+            position: fixed;
+            right: 20px;
+            top: 20px;
+            background: white;
+            padding: 12px 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            cursor: pointer;
+            z-index: 1050;
+            border: 1px solid var(--primary);
+            color: var(--primary);
+            font-weight: 600;
+        }
+
+        .glass-card {
+            background: white;
+            border-radius: var(--card-radius);
+            padding: 25px;
+            margin-bottom: 24px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+        }
+
+        .skill-tag {
+            background: #f1f5f9;
+            color: var(--primary);
+            padding: 6px 12px;
+            border-radius: 8px;
+            font-size: 11px;
+            font-weight: 600;
+            display: inline-block;
+            margin: 2px;
+        }
+
+        .overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.2);
+            display: none;
+            z-index: 1090;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="overlay" id="overlay" onclick="toggleFilter()"></div>
+
+    <div class="sidebar">
+
+    <h4> Matched Jobs! ☑️ </h4>
+
+    <a href="{{ url_for('dashboard') }}">
+    <i class="fas fa-home"></i> Home 
+    </a>
+
+    <a href="{{ url_for('upload_resume') }}">
+    <i class="fas fa-upload"></i> Upload Resume
+    </a>
+
+    <a href="{{ url_for('recommend_jobs') }}">
+    <i class="fas fa-briefcase"></i> Job Matches
+    </a>
+
+    <a href="{{ url_for('interview_prep') }}">
+    <i class="fas fa-user-tie"></i> Interview Prep
+    </a>
+
+    <a href="{{ url_for('logout') }}">
+    <i class="fas fa-sign-out-alt"></i> Logout
+    </a>
+
+    </div>
+
+
+    <div class="filter-toggle" onclick="toggleFilter()">
+        <i class="fas fa-sliders me-2"></i> Filter Jobs
+    </div>
+
+    <div class="filter-drawer" id="filterDrawer">
+        <h5 class="fw-bold mb-4">Refine Search</h5>
+        <form method="POST" action="{{ url_for('recommend_jobs') }}">
+            <div class="mb-3">
+                <label class="small fw-bold text-muted">Skills</label>
+                <input type="text" name="skills" class="form-control" placeholder={{ skills }}>
+            </div>
+            <div class="mb-3">
+                <label class="small fw-bold text-muted">Role</label>
+                <input type="text" name="roles" class="form-control" placeholder={{ roles }}>
+            </div>
+            <div class="mb-3">
+                <label class="small fw-bold text-muted">Job Type</label>
+                <select name="job_type" class="form-select" placeholder={{ job_type }}>
+                    <option value="">All Types</option>
+                    <option value="Fulltime">Full Time</option>
+                    <option value="Parttime">Part Time</option>
+                    <option value="internship">Internship</option>
+                    <option value="freelance">Freelance</option>
+                </select>
+            </div>
+             <div class="mb-3">
+                <label class="small fw-bold text-muted">Experience</label>
+                <select name="experience" class="form-select" placeholder={{ experience }}>
+                    <option value="">Experience</option>
+                    <option value="Entry Level">Entry Level</option>
+                    <option value="Mid Level">Mid Level</option>
+                    <option value="Senior Level">Senior Level</option>
+                </select>
+            </div>
+            <button class="btn btn-primary w-100 mt-4 py-3 rounded-3">Apply Filters </button>
+        </form>
+    </div>
+
+    <div class="main">
+        <div class="header animate__animated animate__fadeInDown">
+            <h3 class="fw-bold">Hello, {{ session.username }}</h3>
+            <p class="opacity-75 mb-0">Discovering the best opportunities for your skillset.</p>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-8 animate__animated animate__fadeInUp">
+                <div class="row g-4">
+                    {% for job in jobs %}
+                    <div class="col-md-6">
+                        <div class="job-card">
+                            <div class="d-flex justify-content-between align-items-start mb-4">
+                                <div>
+                                    <h6 class="fw-bold text-dark mb-1">{{ job.jobtitle }}</h6>
+                                    <p class="text-muted small"><i class="far fa-building me-1"></i> {{ job.company }}</p>
+                                </div>
+                                <div class="match-badge-container">
+                                    <span class="match-badge">{{ job.match_score }}%</span>
+                                    <div class="match-popup">
+                                        🚀 Your profile matches {{ job.match_score }}% of requirements!
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="d-flex justify-content-between align-items-center">
+                                
+                                <a href="{{ job.url }}" target="_blank" class="btn btn-primary btn-sm rounded-3 px-3">Apply</a>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <div class="col-lg-4">
+                <div class="glass-card animate__animated animate__fadeInRight">
+                    <div class="info-trigger w-100 mb-4">
+                        <h6 class="fw-bold mb-0">ATS Performance <i class="fas fa-info-circle small text-muted"></i></h6>
+                        <div class="chart-explanation">
+                            <b>What is ATS?</b><br>
+                            Applicant Tracking Systems scan your resume for keywords. A higher score means your resume is better optimized for AI filters.
+                        </div>
+                    </div>
+                    <div style="width:160px; margin: auto;">
+                        <canvas id="atsChart"></canvas>
+                    </div>
+                    <div class="mt-4 text-center">
+                        {% for skill in skills %}
+                        <span class="skill-tag">{{ skill }}</span>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <div class="glass-card animate__animated animate__fadeInRight">
+                    <div class="info-trigger w-100 mb-4">
+                        <h6 class="fw-bold mb-0">Market Alignment <i class="fas fa-info-circle small text-muted"></i></h6>
+                        <div class="chart-explanation">
+                            <b>How is this calculated?</b><br>
+                            We compare your current resume strength against the top-performing profiles and average industry demands.
+                        </div>
+                    </div>
+                    <canvas id="skillRadar"></canvas>
+                </div>
+
+                <div class="glass-card">
+                    <h6 class="fw-bold mb-3">External Links</h6>
+                    <div class="d-grid gap-2">
+                        <a href="{{ linkedin_url }}" target="_blank" class="btn btn-outline-secondary btn-sm rounded-pill">LinkedIn</a>
+                        <a href="{{ github_url }}" target="_blank" class="btn btn-outline-dark btn-sm rounded-pill">GitHub</a>
+                        <a href="{{ indeed_url }}" target="_blank" class="btn btn-outline-primary btn-sm rounded-pill">Indeed</a>
+                        <a href="{{ glassdoor_url }}" target="_blank" class="btn btn-outline-danger btn-sm rounded-pill">Glassdoor</a>
+                        <a href="{{naukri_url}}" target="_blank" class="btn btn-outline-success btn-sm rounded-pill">Naukri</a>
+                        <a href="{{ upwork_url }}" target="_blank" class="btn btn-outline-success btn-sm rounded-pill">Upwork</a>
+                    </div>
+                </div>
+                <div class="glass-card">
+                    <h6 class="fw-bold mb-4">Freelance Opportunities</h6>
+                    <div class="d-grid gap-2">
+                        <a href="{{ upwork_url }}" target="_blank" class="btn btn-outline-success w-100 mb-2">Upwork</a>
+
+                        <a href="{{ freelancer_url }}" target="_blank" class="btn btn-outline-primary w-100 mb-2">Freelancer</a>
+
+                        <a href="{{ fiverr_url }}" target="_blank" class="btn btn-outline-warning w-100">Fiverr</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="jobData" data-scores="{{ (jobs | map(attribute='match_score') | list | tojson) }}"></div>
+
+    <script>
+        function toggleFilter() {
+            document.getElementById('filterDrawer').classList.toggle('active');
+            document.getElementById('overlay').style.display =
+                document.getElementById('overlay').style.display === 'block' ? 'none' : 'block';
+        }
+
+        function toggleFullScreen() {
+            document.body.classList.toggle('full-screen');
+            const icon = document.querySelector('.fs-toggle-btn i');
+            if (document.body.classList.contains('full-screen')) {
+                icon.className = 'fas fa-compress';
+            } else {
+                icon.className = 'fas fa-expand';
+            }
+        }
+
+        // ATS Chart
+        const atsScore = parseInt("{{ resume_score }}") || 75;
+        new Chart(document.getElementById("atsChart"), {
+            type: "doughnut",
+            data: {
+                datasets: [{
+                    data: [atsScore, 100 - atsScore],
+                    backgroundColor: ["#6366f1", "#f1f5f9"],
+                    borderWidth: 0,
+                    cutout: '80%'
+                }]
+            },
+            options: { plugins: { legend: { display: false } } }
+        });
+
+        // Alignment Chart
+        const jobMatches = JSON.parse(document.getElementById('jobData').getAttribute('data-scores'));
+        const avgMatch = jobMatches.length ? Math.round(jobMatches.reduce((a, b) => a + b, 0) / jobMatches.length) : 0;
+        const bestMatch = jobMatches.length ? Math.max(...jobMatches) : 0;
+
+        new Chart(document.getElementById("skillRadar"), {
+            type: "bar",
+            data: {
+                labels: ["Avg", "Top", "You"],
+                datasets: [{
+                    data: [avgMatch, bestMatch, atsScore],
+                    backgroundColor: ["#cbd5e1", "#9333ea", "#6366f1"],
+                    borderRadius: 10
+                }]
+            },
+            options: {
+                plugins: { legend: { display: false } },
+                scales: { y: { display: false }, x: { grid: { display: false } } }
+            }
+        });
+    </script>
+</body>
+
+</html>

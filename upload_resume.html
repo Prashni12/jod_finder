@@ -1,0 +1,299 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload Resume | AI Job Finder</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+
+    <style>
+        :root {
+            --primary: #6366f1;
+            --secondary: #9333ea;
+            --dark-surface: #0f172a;
+            --bg-body: #f1f5f9;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background: var(--bg-body);
+            min-height: 100vh;
+            transition: all 0.3s ease;
+        }
+
+/* SIDEBAR */
+        .sidebar {
+            position: fixed;
+            width: 240px;
+            height: 100vh;
+            background: #0f172a;
+            color: white;
+            padding: 30px 20px;
+            z-index: 1000;
+        }
+
+        body.full-screen .sidebar { display: none; }
+        body.full-screen .main { margin-left: 0; }
+
+        .sidebar a {
+            display: block;
+            color: #cbd5e1;
+            text-decoration: none;
+            margin: 10px 0;
+            padding: 12px;
+            border-radius: 12px;
+            transition: 0.3s;
+        }
+
+        .sidebar a:hover { background: rgba(255, 255, 255, 0.1); color: white; }
+
+        /* MAIN CONTENT AREA */
+        .main {
+            margin-left: 260px;
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+        }
+
+        /* UPLOAD CARD */
+        .upload-card {
+            background: white;
+            border-radius: 28px;
+            padding: 50px;
+            width: 100%;
+            max-width: 700px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.05);
+            text-align: center;
+            border: 1px solid #e2e8f0;
+        }
+
+        /* PROGRESS STEPS */
+        .steps-container {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 40px;
+            position: relative;
+        }
+
+        .step-item {
+            z-index: 2;
+            background: white;
+            padding: 0 10px;
+        }
+
+        .step-circle {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #f1f5f9;
+            color: #94a3b8;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            margin: 0 auto 10px;
+            transition: 0.3s;
+            border: 2px solid #e2e8f0;
+        }
+
+        .step-item.active .step-circle {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+            box-shadow: 0 0 15px rgba(99, 102, 241, 0.4);
+        }
+
+        .step-label {
+            font-size: 12px;
+            font-weight: 600;
+            color: #64748b;
+        }
+
+        /* DRAG & DROP AREA */
+        .drag-zone {
+            border: 2px dashed #cbd5e1;
+            border-radius: 24px;
+            padding: 60px 20px;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            background: #f8fafc;
+            position: relative;
+        }
+
+        .drag-zone:hover {
+            border-color: var(--primary);
+            background: #eff6ff;
+            transform: scale(1.01);
+        }
+
+        .drag-zone i {
+            font-size: 50px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 20px;
+        }
+
+        /* FILE INFO POPUP */
+        .file-pill {
+            display: none;
+            background: #f0fdf4;
+            color: #16a34a;
+            padding: 12px 20px;
+            border-radius: 14px;
+            margin-top: 20px;
+            font-weight: 600;
+            border: 1px solid #dcfce7;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            animation: bounceIn 0.5s;
+        }
+
+        /* MODERN BUTTON */
+        .btn-analyze {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border: none;
+            color: white;
+            padding: 16px;
+            border-radius: 16px;
+            font-weight: 700;
+            width: 100%;
+            margin-top: 30px;
+            transition: 0.3s;
+            box-shadow: 0 10px 15px -3px rgba(99, 102, 241, 0.3);
+        }
+
+        .btn-analyze:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 20px 25px -5px rgba(99, 102, 241, 0.4);
+            opacity: 0.9;
+        }
+
+        .btn-analyze:disabled {
+            background: #cbd5e1;
+            box-shadow: none;
+            transform: none;
+            cursor: not-allowed;
+        }
+
+        /* HIDDEN SIDEBAR FOR FULL SCREEN (Logic remains same) */
+        body.full-screen .sidebar { display: none; }
+        body.full-screen .main { margin-left: 0; }
+
+    </style>
+</head>
+
+<body>
+
+    <div class="sidebar">
+        <h4>Upload Resume 📑</h4>
+        <a href="{{ url_for('dashboard') }}"><i class="fas fa-home me-2"></i> Home </a>
+        <a href="{{ url_for('upload_resume') }}" class="text-white"><i class="fas fa-upload me-2"></i> Resume</a>
+        <a href="{{ url_for('recommend_jobs') }}"><i class="fas fa-briefcase me-2"></i> Job Matches</a>
+        <a href="{{ url_for('interview_prep') }}"><i class="fas fa-user-graduate me-2"></i> Interview Prep</a>
+        <a href="{{ url_for('logout') }}"><i class="fas fa-sign-out-alt me-2"></i> Logout</a>
+    </div>
+
+    <div class="main">
+        <div class="upload-card animate__animated animate__fadeIn">
+            <h2 class="fw-bold mb-2">Resume Intelligence</h2>
+            <p class="text-muted mb-5">Upload your profile to unlock related matching jobs.</p>
+
+            <div class="steps-container">
+                <div class="step-item active">
+                    <div class="step-circle">1</div>
+                    <div class="step-label">Upload</div>
+                </div>
+                
+                <div class="step-item" id="step2">
+                    <div class="step-circle">2</div>
+                    <div class="step-label">Match Score</div>
+                </div>
+            </div>
+
+            <form method="POST" enctype="multipart/form-data" id="uploadForm">
+                <div class="drag-zone" id="dragZone">
+                    <i class="fas fa-cloud-arrow-up"></i>
+                    <h5 class="fw-bold">Drop your resume here</h5>
+                    <p class="small text-muted mb-0">PDF format supported (Max 16MB)</p>
+                    <input type="file" name="resume" id="fileInput" accept=".pdf" hidden required>
+                </div>
+
+                <div class="file-pill" id="fileInfo">
+                    <i class="fas fa-file-pdf"></i>
+                    <span id="fileName"></span>
+                    <i class="fas fa-check-circle ms-auto"></i>
+                </div>
+
+                <button type="submit" class="btn-analyze" id="submitBtn" disabled>
+                    <i class="fas fa-wand-magic-sparkles me-2"></i> Fetch Matching Jobs!
+                </button>
+            </form>
+
+            <div class="mt-4">
+                <a href="{{ url_for('dashboard') }}" class="text-decoration-none small fw-bold text-muted">
+                    <i class="fas fa-arrow-left me-1"></i> Return to Dashboard
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const dragZone = document.getElementById("dragZone");
+        const fileInput = document.getElementById("fileInput");
+        const fileInfo = document.getElementById("fileInfo");
+        const fileName = document.getElementById("fileName");
+        const submitBtn = document.getElementById("submitBtn");
+        const step2 = document.getElementById("step2");
+
+        dragZone.addEventListener("click", () => fileInput.click());
+
+        fileInput.addEventListener("change", function () {
+            let file = this.files[0];
+            if (file && file.type === "application/pdf") {
+                fileName.innerText = file.name;
+                fileInfo.style.display = "flex";
+                submitBtn.disabled = false;
+                step2.classList.add("active"); // Visual feedback that progress started
+                
+                // Add a little pulse animation
+                submitBtn.classList.add("animate__animated", "animate__pulse");
+            } else {
+                alert("Please upload a PDF file only");
+                fileInput.value = "";
+                fileInfo.style.display = "none";
+                submitBtn.disabled = true;
+            }
+        });
+
+        dragZone.addEventListener("dragover", (e) => {
+            e.preventDefault();
+            dragZone.style.borderColor = "#6366f1";
+            dragZone.style.background = "#eff6ff";
+        });
+
+        dragZone.addEventListener("dragleave", () => {
+            dragZone.style.borderColor = "#cbd5e1";
+            dragZone.style.background = "#f8fafc";
+        });
+
+        dragZone.addEventListener("drop", (e) => {
+            e.preventDefault();
+            fileInput.files = e.dataTransfer.files;
+            fileInput.dispatchEvent(new Event("change"));
+        });
+    </script>
+</body>
+
+</html>

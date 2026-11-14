@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Dashboard | AI Job Finder</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+
+    <style>
+        :root {
+            --primary: #6366f1;
+            --secondary: #9333ea;
+            --dark-surface: #0f172a;
+            --bg-body: #f1f5f9;
+            --card-radius: 24px;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background: var(--bg-body);
+            transition: all 0.3s ease;
+        }
+
+        /* SIDEBAR (Original project style) */
+        .sidebar {
+            position: fixed;
+            width: 240px;
+            height: 100vh;
+            background: var(--dark-surface);
+            color: white;
+            padding: 30px 20px;
+            z-index: 1000;
+        }
+
+        .sidebar h4 { font-weight: 700; color: var(--primary); margin-bottom: 30px; }
+
+        .sidebar a {
+            display: block;
+            color: #94a3b8;
+            text-decoration: none;
+            margin: 8px 0;
+            padding: 12px;
+            border-radius: 12px;
+            transition: 0.3s;
+        }
+
+        .sidebar a:hover { background: rgba(255, 255, 255, 0.1); color: white; }
+
+        /* MAIN AREA */
+        .main {
+            margin-left: 260px;
+            padding: 40px;
+            position: relative;
+        }
+
+        body.full-screen .sidebar { display: none; }
+        body.full-screen .main { margin-left: 0; }
+
+        /* FULL SCREEN TOGGLE */
+        .fs-toggle-btn {
+            position: absolute;
+            top: 20px;
+            right: 40px;
+            background: white;
+            border: 1px solid #e2e8f0;
+            padding: 8px 16px;
+            border-radius: 12px;
+            font-weight: 600;
+            color: var(--primary);
+            cursor: pointer;
+            z-index: 1001;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
+        }
+
+        /* HERO HEADER */
+        .header-hero {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            padding: 60px;
+            color: white;
+            border-radius: 30px;
+            margin-bottom: 40px;
+            box-shadow: 0 10px 25px -5px rgba(99, 102, 241, 0.3);
+            animation: fadeInDown 0.8s;
+        }
+
+        /* FEATURE CARDS */
+        .feature-card {
+            background: white;
+            border-radius: var(--card-radius);
+            padding: 30px;
+            height: 100%;
+            border: 1px solid #e2e8f0;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.1);
+            border-color: var(--primary);
+        }
+
+        .icon-box {
+            width: 60px;
+            height: 60px;
+            background: #eef2ff;
+            color: var(--primary);
+            border-radius: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            margin-bottom: 25px;
+            transition: 0.3s;
+        }
+
+        .feature-card:hover .icon-box {
+            background: var(--primary);
+            color: white;
+            transform: rotate(-5deg) scale(1.1);
+        }
+
+        /* POPUP TOOLTIP */
+        .popup {
+            position: absolute;
+            bottom: 110%;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--dark-surface);
+            color: white;
+            padding: 10px 16px;
+            border-radius: 12px;
+            font-size: 12px;
+            white-space: nowrap;
+            opacity: 0;
+            visibility: hidden;
+            transition: 0.3s;
+            z-index: 10;
+            box-shadow: 0 10px 15px rgba(0,0,0,0.2);
+        }
+
+        .feature-card:hover .popup {
+            opacity: 1;
+            visibility: visible;
+            bottom: 120%;
+        }
+
+        h2, h5 { font-weight: 700; }
+        p { color: #64748b; font-size: 0.95rem; line-height: 1.6; }
+
+    </style>
+</head>
+
+<body>
+
+    <div class="sidebar">
+        <h4>Dashboard 👩‍💻</h4>
+        <a href="{{ url_for('dashboard') }}" class="text-white fw-bold"><i class="fas fa-home me-2"></i> Home</a>
+        <a href="{{ url_for('upload_resume') }}"><i class="fas fa-upload me-2"></i> Upload Resume</a>
+        <a href="{{ url_for('recommend_jobs') }}"><i class="fas fa-briefcase me-2"></i> Job Matches</a>
+        <a href="{{ url_for('interview_prep') }}"><i class="fas fa-user-tie me-2"></i> Interview Prep</a>
+        <a href="{{ url_for('logout') }}"><i class="fas fa-sign-out-alt me-2"></i> Logout</a>
+    </div>
+
+    <div class="main">
+        <button class="fs-toggle-btn" onclick="toggleFullScreen()">
+            <i class="fas fa-expand"></i> Full Screen
+        </button>
+
+        <div class="header-hero">
+            <h1 class="fw-bold mb-3">Intelligent Job Ecosystem</h1>
+            <p class="opacity-75 mb-0 text-white">Unlock personalized career opportunities powered by advanced resume analysis and real-time market data.</p>
+        </div>
+
+        <div class="row g-4">
+            <div class="col-md-4 animate__animated animate__fadeInUp" style="animation-delay: 0.1s;">
+                <div class="feature-card">
+                    <div class="popup">Check your profile strength</div>
+                    <div class="icon-box">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <h5>ATS Score</h5>
+                    <p>Evaluate your resume against industry standards using deep keyword analysis to bypass automated filters.</p>
+                </div>
+            </div>
+
+            <div class="col-md-4 animate__animated animate__fadeInUp" style="animation-delay: 0.2s;">
+                <div class="feature-card">
+                    <div class="popup">Real-time Job Alerts</div>
+                    <div class="icon-box">
+                        <i class="fas fa-briefcase"></i>
+                    </div>
+                    <h5>Job Recommendations</h5>
+                    <p>The system fetches real-time jobs from APIs and recommends the most relevant opportunities.</p>
+                </div>
+            </div>
+
+            <div class="col-md-4 animate__animated animate__fadeInUp" style="animation-delay: 0.3s;">
+                <div class="feature-card">
+                    <div class="popup">Granular Control</div>
+                    <div class="icon-box">
+                        <i class="fas fa-sliders"></i>
+                    </div>
+                    <h5>Smart Filters</h5>
+                    <p>Refine your search by experience level, job type, and salary range to find exactly what you're looking for.</p>
+                </div>
+            </div>
+
+            <div class="col-md-4 animate__animated animate__fadeInUp" style="animation-delay: 0.4s;">
+                <div class="feature-card">
+                    <div class="popup">Aggregated Search</div>
+                    <div class="icon-box">
+                        <i class="fas fa-globe"></i>
+                    </div>
+                    <h5>Multi-Platform</h5>
+                    <p>Sync jobs from LinkedIn, Indeed, and Naukri into a single, unified dashboard for easier tracking.</p>
+                </div>
+            </div>
+
+            <div class="col-md-4 animate__animated animate__fadeInUp" style="animation-delay: 0.5s;">
+                <div class="feature-card">
+                    <div class="popup">Hiring Success</div>
+                    <div class="icon-box">
+                        <i class="fas fa-graduation-cap"></i>
+                    </div>
+                    <h5>Career Prep</h5>
+                    <p>Master your upcoming interviews with technical banks, HR behavioral questions, and aptitude modules.</p>
+                </div>
+            </div>
+
+            <div class="col-md-4 animate__animated animate__fadeInUp" style="animation-delay: 0.6s;">
+                <div class="feature-card">
+                    <div class="popup">Gig Economy</div>
+                    <div class="icon-box">
+                        <i class="fas fa-laptop-code"></i>
+                    </div>
+                    <h5>Freelance Hub</h5>
+                    <p>Direct integration with Upwork and Fiverr to help you find project-based opportunities and remote work.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function toggleFullScreen() {
+            document.body.classList.toggle('full-screen');
+            const btn = document.querySelector('.fs-toggle-btn');
+            btn.innerHTML = document.body.classList.contains('full-screen') 
+                ? '<i class="fas fa-compress"></i> Exit Full Screen' 
+                : '<i class="fas fa-expand"></i> Full Screen';
+        }
+    </script>
+</body>
+
+</html>
